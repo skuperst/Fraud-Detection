@@ -6,3 +6,5 @@ cloud-sql-python-connector
 pg8000
 pandas
 numpy
+xgboost
+scikit-learn==1.5.2

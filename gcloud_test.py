@@ -1,21 +1,20 @@
 import os
-from google.cloud.sql.connector import Connector
-import pg8000.native  # PostgreSQL driver
 from dotenv import load_dotenv
-import os
-
-# Load environment variables from the .env file
-load_dotenv()
-
-# Access the variables
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
-DB_NAME = os.getenv('DB_NAME')
-DB_USER = os.getenv('DB_USER')
-DB_PASS = os.getenv('DB_PASS')
-INSTANCE_CONNECTION_NAME = os.getenv('INSTANCE_CONNECTION_NAME')
+from google.cloud.sql.connector import Connector
+#import pg8000.native  # PostgreSQL driver
 
 def create_database_connection():
 
+    # Load environment variables from the .env file
+    load_dotenv()
+
+    # Access the variables
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+    DB_NAME = os.getenv('DB_NAME')
+    DB_USER = os.getenv('DB_USER')
+    DB_PASS = os.getenv('DB_PASS')
+    INSTANCE_CONNECTION_NAME = os.getenv('INSTANCE_CONNECTION_NAME')
+    
     # Initialize Cloud SQL Connector
     connector = Connector()
     # Create a connection to the database using pg8000 driver
@@ -88,16 +87,38 @@ def insert_more_data():
     except Exception as e:
         print("Error:", e)
 
-def create_new_table():
+def create_new_table(table_name):
     try:        
         cursor, connection = create_database_connection()
         try:
-            cursor.execute("""
-            CREATE TABLE IF NOT EXISTS another_table (
-                id SERIAL PRIMARY KEY,
-                description TEXT
+            cursor.execute(f"""
+            CREATE TABLE IF NOT EXISTS {table_name} (
+                cc_num VARCHAR(50),
+                merchant VARCHAR(100),
+                category VARCHAR(50),
+                amt DECIMAL,
+                first_name VARCHAR(100),
+                last_name VARCHAR(100),
+                gender VARCHAR(10),
+                street VARCHAR(255),
+                city VARCHAR(100),
+                state VARCHAR(50),
+                zip VARCHAR(20),
+                lat DECIMAL,
+                long DECIMAL,
+                city_pop INTEGER,
+                job VARCHAR(100),
+                dob DATE,
+                trans_num VARCHAR(50),
+                merch_lat DECIMAL,
+                merch_long DECIMAL,
+                is_fraud BOOLEAN,
+                is_fraud_predicted BOOLEAN
             );
-            """)
+            """
+            )
+
+
             connection.commit()
             print("New table created successfully!")
         finally:
@@ -105,9 +126,27 @@ def create_new_table():
     except Exception as e:
         print("Error:", e)
 
+def delete_table(table_name):
+    try:
+        # Create database connection and cursor
+        cursor, connection = create_database_connection()
+        try:
+            # Construct and execute the SQL query to drop the table
+            cursor.execute(f"""
+            DROP TABLE IF EXISTS {table_name};
+            """)
+            connection.commit()  # Commit the transaction
+            print(f"Table '{table_name}' deleted successfully!")
+        finally:
+            cursor.close()  # Always close the cursor after executing the query
+    except Exception as e:
+        print("Error:", e)  # Catch any exceptions and print the error message
+
+
 if __name__ == "__main__":
 #    test_database_connection()
-#    list_tables_in_database()
-    verify_data_in_test_table()
+    list_tables_in_database()
+#    verify_data_in_test_table()
 #    insert_more_data()
-#    create_new_table()
+#    create_new_table('transactions_table')
+#    delete_table('')

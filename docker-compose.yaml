@@ -1,0 +1,67 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    ports:
+      - "5432:5432"
+    networks:
+      - airflow-net
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  airflow-webserver:
+    image: apache/airflow:2.5.0
+    environment:
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__WEB_SERVER__RBAC=True
+    ports:
+      - "8080:8080"
+    networks:
+      - airflow-net
+    depends_on:
+      - postgres
+    volumes:
+      - ./dags:/opt/airflow/dags  # Mount the local DAGs folder to the Airflow container
+      - ./requirements.txt:/requirements.txt  # Mount the requirements.txt file
+    command: >
+      bash -c "pip install -r /requirements.txt && airflow webserver"  # Install dependencies before starting Airflow
+
+  airflow-scheduler:
+    image: apache/airflow:2.5.0
+    environment:
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+    networks:
+      - airflow-net
+    depends_on:
+      - postgres
+    volumes:
+      - ./dags:/opt/airflow/dags  # Mount the local DAGs folder to the Airflow container
+      - ./requirements.txt:/requirements.txt  # Mount the requirements.txt file
+    command: >
+      bash -c "pip install -r /requirements.txt && airflow scheduler"  # Install dependencies before starting Airflow
+
+  airflow-worker:
+    image: apache/airflow:2.5.0
+    environment:
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+    networks:
+      - airflow-net
+    depends_on:
+      - postgres
+    volumes:
+      - ./dags:/opt/airflow/dags  # Mount the local DAGs folder to the Airflow container
+      - ./requirements.txt:/requirements.txt  # Mount the requirements.txt file
+    command: >
+      bash -c "pip install -r /requirements.txt && airflow worker"  # Install dependencies before starting Airflow
+
+volumes:
+  postgres_data:
+
+networks:
+  airflow-net:

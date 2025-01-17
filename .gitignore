@@ -1,3 +1,4 @@
 .env
 GOOGLE_CREDENTIALS.json
 my_env/
+fraudTest.csv

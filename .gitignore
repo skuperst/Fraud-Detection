@@ -3,3 +3,4 @@ GOOGLE_CREDENTIALS.json
 my_env/
 fraudTest.csv
 research.ipynb
+__pycache__/

@@ -1,4 +1,5 @@
 import logging
+import os
 from dotenv import load_dotenv
 from google.cloud.sql.connector import Connector
 import requests
@@ -6,6 +7,7 @@ import pandas as pd
 import pickle
 import xgboost
 import json
+from pathlib import Path
 
 from airflow import DAG
 from airflow.operators.python import PythonOperator
@@ -22,8 +24,9 @@ def predict_fraud(api_request_dict):
         # Convert the json input into a dataframe
         df = pd.DataFrame([api_request_dict])
 
+        file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir, os.pardir, 'modelling/category_dict.pkl')
         # Load the categorical dictionary
-        with open('modelling/category_dict.pkl', 'rb') as file:
+        with open(file_path, 'rb') as file:
             category_dict = pickle.load(file)
 
         # Convert object columns to categorical columns
@@ -34,7 +37,8 @@ def predict_fraud(api_request_dict):
 
         # Load the model
         xgboost_model = xgboost.Booster()
-        xgboost_model.load_model('modelling/xgboost_model.json')
+        file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir, os.pardir, 'modelling/xgboost_model.json')
+        xgboost_model.load_model(file_path)
     
         prediction = int(xgboost_model.predict(xgboost.DMatrix(df.drop('is_fraud', axis=1), enable_categorical=True))[0])
 
@@ -64,7 +68,8 @@ def make_api_request():
             logging.error("API request failed.")
 
         # Impose excatly the same columns (order included) as in the large dataset
-        with open('modelling/expected_columns.json', 'rb') as file:
+        file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir, os.pardir, 'modelling/expected_columns.json')
+        with open(file_path, 'rb') as file:
             expected_columns = json.load(file)
         api_request_dict = {column: api_request_dict[column] for column in expected_columns}
 
@@ -90,8 +95,8 @@ default_args = {
 with DAG(
     'make_api_request_dict_dag',  # The unique ID for the DAG
     default_args=default_args,
-    schedule_interval='*/5 * * * *',  # Run every 5 minutes
-    end_date=datetime(2025, 1, 22),  # End date (stop running after Jan 15, 2025)
+    schedule_interval='* * * * *',  # Run every minute
+    end_date=datetime(2026, 1, 22),  # End date (stop running after Jan 15, 2025)
 ) as dag1:
 
     # Task: Make an API request and produce results

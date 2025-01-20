@@ -4,3 +4,7 @@ my_env/
 fraudTest.csv
 research.ipynb
 __pycache__/
+# Ignore all files starting with 'airflow' in the main folder
+/*airflow*
+# But don't ignore the 'airflow' directory
+!/*airflow*/

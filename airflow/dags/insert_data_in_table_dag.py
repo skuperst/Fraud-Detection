@@ -107,7 +107,7 @@ with DAG(
         task_id='wait_for_dag1',  # Task ID for the sensor
         external_dag_id='make_api_request_dict_dag',  # The DAG to wait for
         external_task_id='make_api_request',  # The task within DAG 1 to wait for
-        timeout=600,  # Maximum wait time (600 seconds = 10 minutes)
+        timeout=1200,  # Maximum wait time (1200 seconds = 20 minutes)
         poke_interval=60,  # Time interval to wait between checks (60 seconds)
     )
 

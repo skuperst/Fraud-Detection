@@ -115,3 +115,5 @@ cd Fraud-Detection
    - Port: Default is 5432.
 
 12. Run the dag called **single_task_dag**.
+
+13. (Optional) Connect **Tableau** to the cloud database to see the results.

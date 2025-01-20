@@ -88,7 +88,7 @@ def make_api_request():
         logging.error(f"Error during API request: {str(e)}")
         return None  # Return None if an exception occurs
 
-
+# Establish connection to the PostgreSQL cloud database
 def create_database_connection():
     try:
         # Load environment variables from the .env file

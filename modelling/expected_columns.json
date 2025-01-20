@@ -1,1 +1,1 @@
-["first", "last", "long", "merchant", "lat", "cc_num", "job", "dob", "city_pop", "amt", "city", "zip", "street", "is_fraud", "merch_long", "state", "gender", "trans_num", "category", "merch_lat"]
+["state", "is_fraud", "street", "city_pop", "amt", "job", "cc_num", "city", "merch_lat", "zip", "merchant", "lat", "dob", "long", "first", "category", "last", "trans_num", "gender", "merch_long"]

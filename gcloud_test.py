@@ -144,9 +144,9 @@ def delete_table(table_name):
 
 
 if __name__ == "__main__":
+#    create_new_table('transactions_table')
 #    test_database_connection()
     list_tables_in_database()
 #    verify_data_in_test_table()
 #    insert_more_data()
-#    create_new_table('transactions_table')
 #    delete_table('')

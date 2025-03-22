@@ -104,7 +104,7 @@ cd Fraud-Detection
    airflow scheduler
    ```
 
-11. Open a web browser and navigate to `http://localhost:8080`. In **Admin-> Connaction**:
+11. Open a web browser and navigate to `http://localhost:8080`. In **Admin-> Connection**:
 
    - Connection ID: Choose a name for the connection.
    - Connection Type: Select **Postgres**.

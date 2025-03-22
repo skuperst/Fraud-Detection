@@ -1,10 +1,27 @@
+# Personal
 .env
 GOOGLE_CREDENTIALS.json
+
+# Created by the env anyway
 my_env/
+
+# Too big
 fraudTest.csv
+
+# Garbage :)
 research.ipynb
-__pycache__/
+
 # Ignore all files starting with 'airflow' in the main folder
 /*airflow*
-# But don't ignore the 'airflow' directory
-!/*airflow*/
+
+# Ignore everything in the airflow directory
+/airflow/*
+
+# Don't ignore the dags folder
+!/airflow/dags/
+
+# Don't ignore files in the dags folder
+!/airflow/dags/*
+
+# Nobody knows what is it
+**/__pycache__/

@@ -75,11 +75,11 @@ cd Fraud-Detection
 6. Verify that your .env file looks like this:
 
       ```bash
-      GOOGLE_APPLICATION_CREDENTIALS = GOOGLE_CREDENTIALS.json
-      DB_NAME = <your_database_name>
-      DB_USER = <your_user_name>
-      DB_PASS = <your_password>
-      INSTANCE_CONNECTION_NAME = <your_project_name>:<your_region>:<your_database_name>
+      GOOGLE_APPLICATION_CREDENTIALS=GOOGLE_CREDENTIALS.json
+      DB_NAME=<your_database_name>
+      DB_USER=<your_user_name>
+      DB_PASS=<your_password>
+      INSTANCE_CONNECTION_NAME=<your_project_name>:<your_region>:<your_database_name>
       ```
    with `GOOGLE_CREDENTIALS.json` saved in the same folder.
 

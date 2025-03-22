@@ -11,17 +11,14 @@ fraudTest.csv
 # Garbage :)
 research.ipynb
 
-# Ignore all files starting with 'airflow' in the main folder
-/*airflow*
+# Ignore everything inside airflow/
+airflow/*
 
-# Ignore everything in the airflow directory
-/airflow/*
+# But don't ignore the airflow/dags directory itself
+!airflow/dags/
 
-# Don't ignore the dags folder
-!/airflow/dags/
-
-# Don't ignore files in the dags folder
-!/airflow/dags/*
+# Now, don't ignore Python files inside airflow/dags/
+!airflow/dags/*.py
 
 # Nobody knows what is it
 **/__pycache__/

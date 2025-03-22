@@ -1,6 +1,6 @@
 # Automatic Fraud Detection
 
-The project comprises three key components. First, it utilizes credit card transaction data provided by the European Central Bank to develop an XGBoost-based machine learning model for predicting fraudulent payments. Next, it retrieves real-time payment data via an API, enriches it with fraud predictions, and stores the results in a PostgreSQL database hosted on Google Cloud SQL.
+The project comprises two main parts. First, it utilizes credit card transaction data provided by the European Central Bank to develop an XGBoost-based machine learning model for predicting fraudulent payments. Second, it retrieves real-time payment data via an API, enriches it with fraud predictions, and stores the results in a PostgreSQL database hosted on Google Cloud SQL. Additionally, an alert email is triggered whenever a fraud detection occurs. The second part of the process is orchestrated using Airflow.
 
 ## Table of Contents
 1. [Overview](#overview)
@@ -75,36 +75,44 @@ cd Fraud-Detection
 6. Verify that your .env file looks like this:
 
       ```bash
-      GOOGLE_APPLICATION_CREDENTIALS=GOOGLE_CREDENTIALS.json
-      DB_NAME=<your_database_name>
-      DB_USER=<your_user_name>
-      DB_PASS=<your_password>
-      INSTANCE_CONNECTION_NAME=<your_project_name>:<your_region>:<your_database_name>
+      GOOGLE_APPLICATION_CREDENTIALS = GOOGLE_CREDENTIALS.json
+      DB_NAME = <your_database_name>
+      DB_USER = <your_user_name>
+      DB_PASS = <your_password>
+      INSTANCE_CONNECTION_NAME = <your_project_name>:<your_region>:<your_database_name>
       ```
-      with `GOOGLE_CREDENTIALS.json` saved in the same folder.
+   with `GOOGLE_CREDENTIALS.json` saved in the same folder.
 
-7. Uncomment the `create_new_table(<your_table>)` line in `gcloud_test.py` and run `python gcloud_test.py`  to create the database table you will use for your uploads (if it doesn't already exist). Afterward, verify that the table has been created by running the script again with the `create_new_table(<your_table>)` line still commented out.
+7.  Add the sender and receiver email addresses, along with your Google App Password, to the .env file:
 
-8. Create an Airflow user with the following command:
+      ```bash
+      SENDER_EMAIL = sender@gmail.com
+      RECEIVER_EMAIL = receiver@gmail.com
+      APP_PASSWORD = abcd efgh ijkl mnop
+      ```
+
+8. Uncomment the `create_new_table(<your_table>)` line in `gcloud_test.py` and run `python gcloud_test.py`  to create the database table you will use for your uploads (if it doesn't already exist). Afterward, verify that the table has been created by running the script again with the `create_new_table(<your_table>)` line still commented out.
+
+9. Create an Airflow user with the following command:
 
    ```bash
       airflow users create --username admin --firstname Admin --lastname User --role Admin --email admin@example.com
 
    ```
 
-9. Start the Airflow webserver in one terminal:
+10. Start the Airflow webserver in one terminal:
 
    ```bash
    airflow webserver --port 8080
    ```
 
-10. In another terminal, start the Airflow scheduler:
+11. In another terminal, start the Airflow scheduler:
 
    ```bash
    airflow scheduler
    ```
 
-11. Open a web browser and navigate to `http://localhost:8080`. In **Admin-> Connection**:
+12. Open a web browser and navigate to `http://localhost:8080`. In **Admin-> Connections**:
 
    - Connection ID: Choose a name for the connection.
    - Connection Type: Select **Postgres**.
@@ -114,6 +122,6 @@ cd Fraud-Detection
    - Password: Enter your password, `<your_password> `.
    - Port: Default is 5432.
 
-12. Run the dag called **single_task_dag**.
+13. Run the DAG called **api_to_postgresql_dag** defined in  **main_dag.py**.
 
-13. (Optional) Connect **Tableau** to the cloud database to see the results.
+14. (Optional) Connect **Tableau** to the cloud database to see the results.

@@ -217,12 +217,9 @@ def send_alert_email(**kwargs):
 
         load_dotenv()
         # Access the variables
-        my_email = os.getenv('MY_EMAIL')
-        # From me ..
-        sender_email = my_email
-        # .. to myself
-        receiver_email = my_email
-        app_password = os.getenv('MY_APP_PASSWORD')
+        sender_email = os.getenv('SENDER_EMAIL')
+        receiver_email = os.getenv('RECEIVER_EMAIL')
+        app_password = os.getenv('APP_PASSWORD')
 
         msg = MIMEMultipart()
         msg["From"] = sender_email
